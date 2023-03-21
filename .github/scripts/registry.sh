@@ -12,7 +12,12 @@ esac
 
 version=v${1}
 time=$(date "+%Y-%m-%d")
-VERSION=`cat provider/azure/metadata.yaml | grep 'latest-version' | awk -F ' ' '{print $2}'`
+if [ -f "provider/azure/metadata.yaml" ];then
+  VERSION=`cat provider/azure/metadata.yaml | grep 'latest-version' | awk -F ' ' '{print $2}'`
+else
+  VERSION="azure"
+  mkdir -p provider/azure
+fi
 FOR=`cat selefra-provider-azure* | awk -F '_' '{print $3,$4}' | awk -F '.' '{print $1}' |  sed "s# #_#g"`
 if [ -d "provider/azure/$version" ];then rm -rf provider/azure/$version ; else echo "OK!"; fi && cp -r provider/template/version1 provider/azure/$version
 
@@ -36,13 +41,15 @@ done
 
 if [[ "$VERSION" != "$version" ]]; then
   cp provider/template/metadata.yaml provider/template/metadata.yaml.bak
-  sed "${sedi[@]}" "s#{{.ProviderName}}#azure#g" provider/template/metadata.yaml 
+  sed "${sedi[@]}" "s#{{.ProviderName}}#azure#g" provider/template/metadata.yaml
   sed "${sedi[@]}" "s#{{.LatestVersion}}#${version}#g" provider/template/metadata.yaml
   sed "${sedi[@]}" "s#{{.LatestUpdated}}#${time}#g" provider/template/metadata.yaml
-  sed "${sedi[@]}" "s#{{.Introduction}}#A Selefra provider for Amazon Web Services (azure).#g" provider/template/metadata.yaml
+  sed "${sedi[@]}" "s#{{.Introduction}}#A Selefra provider for azure .#g" provider/template/metadata.yaml
   sed "${sedi[@]}" "s#{{.ProviderVersion}}#${version}#g" provider/template/metadata.yaml
   sed "${sedi[@]}" '6d' provider/template/metadata.yaml
-  sed -n '/^ /p' provider/azure/metadata.yaml >> provider/template/metadata.yaml
+  if [ -f "provider/azure/metadata.yaml" ];then
+    sed -n '/^ /p' provider/azure/metadata.yaml >> provider/template/metadata.yaml
+  fi
   echo "  - ${version}" >> provider/template/metadata.yaml
   cat provider/template/metadata.yaml > provider/azure/metadata.yaml
   mv provider/template/metadata.yaml.bak provider/template/metadata.yaml
