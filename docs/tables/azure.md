@@ -1,9 +1,9 @@
-# Provider: Azure
+# Provider: azure
 
 ## Latest Version 
 
 ```
-v0.0.5
+v0.0.6
 ```
 ## Description 
 
@@ -228,7 +228,6 @@ selefra provider install azure
 - [azure_peering_service_locations](azure_peering_service_locations.md)
 - [azure_workloads_monitors](azure_workloads_monitors.md)
 - [azure_subscription_subscriptions](azure_subscription_subscriptions.md)
-- [azure_subscription_subscription_locations](azure_subscription_subscription_locations.md)
 - [azure_subscription_tenants](azure_subscription_tenants.md)
 - [azure_containerinstance_container_groups](azure_containerinstance_container_groups.md)
 - [azure_elastic_monitors](azure_elastic_monitors.md)
